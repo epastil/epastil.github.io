@@ -3,15 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <title>ICU Sankey Explorer</title>
-<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<script src="js/plotly.min.js"></script>
 <style>
 body { font-family: Arial, sans-serif; margin: 20px; }
 #controls { display: flex; flex-wrap: wrap; gap: 15px; padding-bottom: 15px; }
 label { font-weight: bold; margin-right: 5px; }
 select { padding: 6px 10px; font-size: 15px; }
 button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer; }
-#sankeyDiv { width: 100%; height: 700px; }
+#sankeyDiv { width: 100%; height: 600px; }
 #status { font-size: 13px; color: #555; margin-top: 8px; }
+
+/* Manual legend */
+#legend-wrapper {
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+  padding-top: 12px;
+}
+.legend-section-title {
+  margin: 10px 0 4px;
+  font-size: 15px;
+  font-weight: bold;
+}
+.legend-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+.swatch {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  border-radius: 4px;
+  border: 1px solid #444;
+}
 </style>
 </head>
 
@@ -43,18 +73,18 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
   </div>
 
   <div>
-    <label>CCI calculation:</label>
+    <label>CCI calculation (Age factor):</label>
     <select id="isAgeSelect">
-      <option value="include_age">Include age</option>
-      <option value="exclude_age">Exclude age</option>
+      <option value="include_age">Include</option>
+      <option value="exclude_age">Exclude</option>
     </select>
   </div>
 
   <div>
     <label>Label mode:</label>
     <select id="labelModeSelect">
-      <option value="label_count">Counts</option>
-      <option value="label_count_perc">Counts + %</option>
+      <option value="label_count">Count</option>
+      <option value="label_count_perc">Count & %</option>
     </select>
   </div>
 
@@ -64,6 +94,18 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
 
 <div id="status"></div>
 <div id="sankeyDiv"></div>
+
+<!-- Manual Legend Only -->
+<div id="legend-wrapper">
+  <div class="legend-section-title">Legend</div>
+  <div class="legend-list">
+    <div class="legend-item"><span class="swatch" style="background:rgb(31, 119, 180, 0.5)"></span>CCI: 0</div>
+    <div class="legend-item"><span class="swatch" style="background:rgb(255, 127, 14, 0.5)"></span>CCI: 1 or 2</div>
+    <div class="legend-item"><span class="swatch" style="background:rgb(44, 160, 44, 0.5)"></span>CCI: 3 or 4</div>
+    <div class="legend-item"><span class="swatch" style="background:rgb(214, 39, 40, 0.5)"></span>CCI: 5 or more</div>
+    <div class="legend-item"><span class="swatch" style="background:rgb(148, 103, 189, 0.5)"></span>Death</div>
+  </div>
+</div>
 
 <script>
 // ------------------- State & Persistence -------------------
@@ -152,7 +194,6 @@ async function updateSankey() {
     document.getElementById("status").textContent = "No data for " + key;
     return;
   }
-  loc_map = data.loc_map
 
   const trace = {
     type: "sankey",
@@ -167,12 +208,13 @@ async function updateSankey() {
   const layout = {
     font: { size: 13 },
     // margin: { l: 10, r: 10, t: 80, b: 10 }
-                  annotations: buildHeaderAnnotations(loc_map)
+                  annotations: buildHeaderAnnotations(data.loc_map)
 
   };
 
 
   Plotly.react("sankeyDiv", [trace], layout);
+
   document.getElementById("status").textContent = "Showing: " + key;
   document.getElementById("status").textContent = "" ;
 
