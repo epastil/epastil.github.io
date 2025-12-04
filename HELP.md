@@ -72,62 +72,6 @@ Each selection updates the Sankey plot immediately.
 
 ---
 
-# 📁 Dataset Structure
-
-Each filter combination corresponds to a JSON file located in:
-
-```
-datasets/
-```
-
-Files follow this naming pattern:
-
-```
-{surg}__{sex}__{agegroup}__{age_factor}__{label_mode}.json
-```
-
-Example:
-
-```
-all_female_80_plus_exclude_age_label_count.json
-```
-
-Each file contains:
-
-```json
-{
-  "node": {
-    "label": [
-      ...
-    ],
-    "color": [
-      ...
-    ],
-    "x": [
-      ...
-    ],
-    "y": [
-      ...
-    ]
-  },
-  "link": {
-    "source": [
-      ...
-    ],
-    "target": [
-      ...
-    ],
-    "value": [
-      ...
-    ]
-  }
-}
-```
-
-These values are fed directly to Plotly.
-
----
-
 # 🧭 Interacting with the Sankey Diagram
 
 ### 🔹 Hover
@@ -179,23 +123,8 @@ When re-opening the page:
 
 # 🏷 Legend 
 
-A built-in legend shows the color assigned to each CCI category and death nodes.
+A legend shows the color assigned to each CCI category and death nodes.
 
 ---
-
-# 🧩 Interpretation Notes
-
-* Width of a flow = number of patients transitioning
-* Node height is uniform (Plotly limitation) but **vertical position is fixed per CCI category**
-* Death nodes reflect cumulative deaths between time points
-* When filtering, percentages always refer to the filtered cohort
-
----
-
-# ⚠ Known Limitations
-
-* Plotly Sankey does not auto-size nodes by patient count
-* Legend must be manually maintained if colors change
-* JSON files must exist for every possible filter combination
 
 
