@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>ICU Sankey Explorer</title>
 <script src="js/plotly.min.js"></script>
+
 <style>
 body { font-family: Arial, sans-serif; margin: 20px; }
 #controls { display: flex; flex-wrap: wrap; gap: 15px; padding-bottom: 15px; }
@@ -47,19 +48,21 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
 
 <body>
 
-<h2>ICU Sankey Interactive Explorer</h2>
+<h2>ARF patients Interactive CCI Explorer </h2>
 
 <div id="controls">
 
+  <!-- SEX (new) -->
   <div>
-    <label>Surgical status:</label>
-    <select id="surgSelect">
+    <label>Sex:</label>
+    <select id="sexSelect">
       <option value="all">All</option>
-      <option value="surgical">Surgical</option>
-      <option value="medical">Medical</option>
+      <option value="female">Female</option>
+      <option value="male">Male</option>
     </select>
   </div>
 
+  <!-- AGE -->
   <div>
     <label>Age group:</label>
     <select id="ageSelect">
@@ -72,14 +75,26 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
     </select>
   </div>
 
+  <!-- SURGICAL -->
   <div>
-    <label>CCI calculation (Age factor):</label>
+    <label>Surgical status:</label>
+    <select id="surgSelect">
+      <option value="all">All</option>
+      <option value="surgical">Surgical</option>
+      <option value="medical">Medical</option>
+    </select>
+  </div>
+
+  <!-- AGE FACTOR -->
+  <div>
+    <label>CCI Age factor:</label>
     <select id="isAgeSelect">
       <option value="include_age">Include</option>
       <option value="exclude_age">Exclude</option>
     </select>
   </div>
 
+  <!-- LABEL MODE -->
   <div>
     <label>Label mode:</label>
     <select id="labelModeSelect">
@@ -95,47 +110,29 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
 <div id="status"></div>
 <div id="sankeyDiv"></div>
 
-<!-- Manual Legend Only -->
+<!-- Manual Legend -->
 <div id="legend-wrapper">
   <div class="legend-section-title">Legend</div>
   <div class="legend-list">
     <div class="legend-item"><span class="swatch" style="background:rgb(31, 119, 180, 0.5)"></span>CCI: 0</div>
-    <div class="legend-item"><span class="swatch" style="background:rgb(255, 127, 14, 0.5)"></span>CCI: 1 or 2</div>
-    <div class="legend-item"><span class="swatch" style="background:rgb(44, 160, 44, 0.5)"></span>CCI: 3 or 4</div>
-    <div class="legend-item"><span class="swatch" style="background:rgb(214, 39, 40, 0.5)"></span>CCI: 5 or more</div>
+    <div class="legend-item"><span class="swatch" style="background:rgb(255, 127, 14, 0.5)"></span>CCI: 1–2</div>
+    <div class="legend-item"><span class="swatch" style="background:rgb(44, 160, 44, 0.5)"></span>CCI: 3–4</div>
+    <div class="legend-item"><span class="swatch" style="background:rgb(214, 39, 40, 0.5)"></span>CCI: 5+</div>
     <div class="legend-item"><span class="swatch" style="background:rgb(148, 103, 189, 0.5)"></span>Death</div>
   </div>
 </div>
 
 <script>
-// ------------------- State & Persistence -------------------
+// ------------------- State -------------------
 var state = {
   surg: "all",
+  sex: "all",      // <--- NEW
   age: "all",
   isage: "include_age",
   islabel: "label_count"
 };
 
- function buildHeaderAnnotations(locMap) {
-        return Object.values(locMap).map(cfg => ({
-            x: cfg.x,
-            y: 1.1,          // slightly above the top
-            xref: "paper",
-            yref: "paper",
-            text: cfg.text,
-            showarrow: true,
-            ax: 0,
-            ay: 0,
-            font: {
-                size: 16,
-                color: "black"
-            },
-            align: "center",
-            valign: "middle",
-            height:40
-        }));
-    }
-
+// ------------------- URL & State -------------------
 function saveState() {
   localStorage.setItem("icuSankeyState", JSON.stringify(state));
 }
@@ -147,71 +144,87 @@ function loadSavedState() {
 
 function applyStateToUI() {
   document.getElementById("surgSelect").value = state.surg;
+  document.getElementById("sexSelect").value = state.sex;
   document.getElementById("ageSelect").value = state.age;
   document.getElementById("isAgeSelect").value = state.isage;
   document.getElementById("labelModeSelect").value = state.islabel;
 }
 
-// ------------------- URL Query Support -------------------
 function getURLParams() {
-  const params = new URLSearchParams(window.location.search);
+  const p = new URLSearchParams(window.location.search);
   return {
-    surg: params.get("surg"),
-    age: params.get("age"),
-    isage: params.get("isage"),
-    islabel: params.get("label")
+    surg: p.get("surg"),
+    sex: p.get("sex"),
+    age: p.get("age"),
+    isage: p.get("isage"),
+    islabel: p.get("label")
   };
 }
 
 function updateURL() {
-  const params = new URLSearchParams();
-  params.set("surg", state.surg);
-  params.set("age", state.age);
-  params.set("isage", state.isage);
-  params.set("label", state.islabel);
-  history.replaceState(null, "", "?" + params.toString());
+  const p = new URLSearchParams();
+  p.set("surg", state.surg);
+  p.set("sex", state.sex);
+  p.set("age", state.age);
+  p.set("isage", state.isage);
+  p.set("label", state.islabel);
+  history.replaceState(null, "", "?" + p.toString());
 }
 
-// ------------------- Load Dataset -------------------
+// ------------------- Load dataset -------------------
 async function loadDataset(key) {
   const url = "datasets/" + key + ".json";
   const resp = await fetch(url);
-  if (!resp.ok) {
-    console.warn("Dataset not found:", url);
-    return null;
-  }
-  return await resp.json();
+  return resp.ok ? resp.json() : null;
 }
 
-// ------------------- Draw Sankey -------------------
+// ------------------- HEADER ANNOTATIONS -------------------
+function buildHeaderAnnotations(locMap) {
+  return Object.values(locMap).map(cfg => ({
+    x: cfg.x,
+    y: 1.1,
+    xref: "paper",
+    yref: "paper",
+    text: cfg.text,
+    showarrow: true,
+    ax: 0,
+    ay: 0,
+    font: { size: 14 , variant:"all-petite-caps"},
+    align: "center",
+  }));
+}
+
+// ------------------- PLOT -------------------
 async function updateSankey() {
-  const key = state.surg + "__" + state.age + "__" + state.isage + "__" + state.islabel;
+  const key =
+    state.surg + "__" +
+    state.sex + "__" +     // ← NEW
+    state.age + "__" +
+    state.isage + "__" +
+    state.islabel;
+
   document.getElementById("status").textContent = "Loading " + key + "...";
 
   const data = await loadDataset(key);
-
-  if (!data || !data.node || !data.link) {
-    document.getElementById("status").textContent = "No data for " + key;
+  if (!data || !data.node|| !data.link || !data.loc_map) {
+    document.getElementById("status").textContent = "Dataset missing: " + key;
     return;
   }
 
   const trace = {
     type: "sankey",
     orientation: "h",
-    valueformat: ".0f",
-    valuesuffix: " patients",
-    arrangement: "snap",
     node: data.node,
-    link: data.link
+    link: data.link,
+    valueformat: ".0f",
+    arrangement: "snap"
   };
 
   const layout = {
     font: { size: 13 },
-    // margin: { l: 10, r: 10, t: 80, b: 10 }
-                  annotations: buildHeaderAnnotations(data.loc_map)
-
+    // margin: { l: 10, r: 10, t: 80, b: 10 },
+    annotations: buildHeaderAnnotations(data.loc_map)
   };
-
 
   Plotly.react("sankeyDiv", [trace], layout);
 
@@ -224,32 +237,33 @@ async function updateSankey() {
 
 // ------------------- Reset -------------------
 function resetAll() {
-  state = { surg: "all", age: "all", isage: "include_age", islabel: "label_count" };
+  state = { surg: "all", sex: "all", age: "all", isage: "include_age", islabel: "label_count" };
   localStorage.removeItem("icuSankeyState");
   history.replaceState(null, "", window.location.pathname);
   applyStateToUI();
   updateSankey();
 }
 
-// ------------------- UI Handlers -------------------
+// ------------------- UI HANDLERS -------------------
 document.getElementById("surgSelect").addEventListener("change", e => { state.surg = e.target.value; updateSankey(); });
+document.getElementById("sexSelect").addEventListener("change", e => { state.sex = e.target.value; updateSankey(); });
 document.getElementById("ageSelect").addEventListener("change", e => { state.age = e.target.value; updateSankey(); });
 document.getElementById("isAgeSelect").addEventListener("change", e => { state.isage = e.target.value; updateSankey(); });
 document.getElementById("labelModeSelect").addEventListener("change", e => { state.islabel = e.target.value; updateSankey(); });
 
-// ------------------- Initialize -------------------
+// ------------------- INIT -------------------
 document.addEventListener("DOMContentLoaded", async () => {
-  const urlParams = getURLParams();
+  const url = getURLParams();
   const saved = loadSavedState();
 
-  if (urlParams.surg && urlParams.age && urlParams.isage && urlParams.islabel) {
-    Object.assign(state, urlParams);
+  if (url.surg && url.sex && url.age && url.isage && url.islabel) {
+    Object.assign(state, url);
   } else if (saved) {
     Object.assign(state, saved);
   }
 
   applyStateToUI();
-  await updateSankey();
+  updateSankey();
 });
 </script>
 
