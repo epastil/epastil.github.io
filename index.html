@@ -17,9 +17,9 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
 
 /* Manual legend */
 #legend-wrapper {
-  margin-top: 20px;
-  border-top: 1px solid #ccc;
-  padding-top: 12px;
+  margin-top: 4px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 12px;
 }
 .legend-section-title {
   margin: 10px 0 4px;
@@ -104,19 +104,15 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
     </select>
   </div>
 
-  <button onclick="resetAll()">Reset</button>
-  <a href="https://github.com/epastil/epastil.github.io/tree/main?tab=readme-ov-file#-icu-long-term-outcomes--interactive-sankey-explorer"
-     target="_blank" style="padding:6px 12px; font-size:14px; font-weight:bold; text-decoration:none; ">Help</a>
+  <button onclick="resetAll()" style="padding:6px 12px; font-size:14px; font-weight:bold; text-decoration:none; color:#333; background:#f0f0f0; border:1px solid #aaa; border-radius:4px; cursor:pointer;">Reset</button>
+  <a href="help.html" style="padding:6px 12px; font-size:14px; font-weight:bold; text-decoration:none; color:#333; background:#f0f0f0; border:1px solid #aaa; border-radius:4px; cursor:pointer;">Help</a>
 
 </div>
 
-<div id="status"></div>
-<div id="sankeyDiv"></div>
-
 <!-- Manual Legend -->
 <div id="legend-wrapper">
-  <div class="legend-section-title">Legend</div>
   <div class="legend-list">
+    <span class="legend-section-title" style="margin:0; margin-right:12px;">Legend:</span>
     <div class="legend-item"><span class="swatch" style="background:rgb(31, 119, 180, 0.5)"></span>CCI: 0</div>
     <div class="legend-item"><span class="swatch" style="background:rgb(255, 127, 14, 0.5)"></span>CCI: 1–2</div>
     <div class="legend-item"><span class="swatch" style="background:rgb(44, 160, 44, 0.5)"></span>CCI: 3–4</div>
@@ -124,6 +120,9 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
     <div class="legend-item"><span class="swatch" style="background:rgb(148, 103, 189, 0.5)"></span>Death</div>
   </div>
 </div>
+
+<div id="status"></div>
+<div id="sankeyDiv"></div>
 
 <script>
 // ------------------- State -------------------
