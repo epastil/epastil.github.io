@@ -21,13 +21,13 @@ The Sankey diagram tracks patient distributions across several time points:
 
 Each colored block represents a **CCI category** at that time point:
 
-| CCI Category | Color                                                   |
-|--------------|---------------------------------------------------------|
-| 0            | <span style="color:rgb(31, 119, 180)">█</span> Blue     |
-| 1–2          | <span style="color:rgb(255, 127, 14)">█</span> Orange   |
-| 3–4          | <span style="color:rgb(44, 160, 44)">█</span>  Green    |
-| 5+           | <span style="color:rgb(214, 39, 40)">█</span>  Red      |
-| Death        | <span style="color:rgb(148, 103, 189)">█</span>  Purple |
+| CCI Category | Color                                |
+|--------------|--------------------------------------|
+| 0            | 🔵 Blue     |
+| 1–2          | 🟠 Orange   |
+| 3–4          | 🟢 Green    |
+| 5+           | 🔴 Red      |
+| Death        | 🟣 Purple   |
 
 Flows between blocks show how patients transition from one category to another over time.
 
