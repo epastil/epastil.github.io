@@ -201,7 +201,7 @@ async function loadDataset(key) {
 function buildHeaderAnnotations(locMap) {
   return Object.values(locMap).map(cfg => ({
     x: cfg.x,
-    y: 1.1,
+    y: 1.03,
     xref: "paper",
     yref: "paper",
     text: cfg.text,
@@ -245,7 +245,7 @@ async function updateSankey() {
     annotations: buildHeaderAnnotations(data.loc_map)
   };
 
-  Plotly.react("sankeyDiv", [trace], layout);
+  Plotly.react("sankeyDiv", [trace], layout,  {displayModeBar: false});
 
   document.getElementById("status").textContent = "Showing: " + key;
   document.getElementById("status").textContent = "" ;
@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   applyStateToUI();
-  updateSankey();
+  await updateSankey();
   resizeSankey();
 });
 window.addEventListener("resize", resizeSankey);
