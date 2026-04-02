@@ -198,9 +198,9 @@ pre code { background: none; padding: 0; color: inherit; }
     <ol>
       <li><strong>Before admission</strong></li>
       <li><strong>Hospital discharge</strong></li>
-      <li><strong>6 months</strong> after discharge</li>
-      <li><strong>1 year</strong> after discharge</li>
-      <li><strong>2 years</strong> after discharge</li>
+      <li><strong>6 months</strong> post-discharge</li>
+      <li><strong>1 year</strong> post-discharge</li>
+      <li><strong>2 years</strong> post-discharge</li>
     </ol>
     <p>Each colored block represents a <strong>CCI category</strong> at that time point:</p>
     <table class="color-table">
@@ -212,6 +212,36 @@ pre code { background: none; padding: 0; color: inherit; }
       <tr><td>Death</td><td><span class="swatch" style="background:rgb(148, 103, 189)"></span> Purple</td></tr>
     </table>
     <p>Flows between blocks show how patients transition from one category to another over time.</p>
+  </div>
+
+  <!-- CCI Calculation -->
+  <div class="section">
+    <h2>How CCI is Calculated</h2>
+    <p>The <strong>Charlson Comorbidity Index (CCI)</strong> is a weighted score that predicts 10-year mortality risk based on the presence of specific comorbid conditions. Each condition is assigned a weight reflecting its impact on mortality.</p>
+
+    <h3>Condition Weights</h3>
+    <table class="color-table">
+      <tr><th>Weight</th><th>Conditions</th></tr>
+      <tr><td><strong>1 point</strong></td><td>Myocardial infarction, Congestive heart failure, Peripheral vascular disease, Cerebrovascular disease, Dementia, Chronic pulmonary disease, Connective tissue disease, Peptic ulcer disease, Mild liver disease, Diabetes without complications</td></tr>
+      <tr><td><strong>2 points</strong></td><td>Hemiplegia, Moderate/severe renal disease, Diabetes with complications, Cancer (any), Leukemia, Lymphoma</td></tr>
+      <tr><td><strong>3 points</strong></td><td>Moderate/severe liver disease</td></tr>
+      <tr><td><strong>6 points</strong></td><td>Metastatic solid tumor, AIDS/HIV</td></tr>
+    </table>
+
+    <h3>Age Factor</h3>
+    <p>When age is included, additional points are added based on age decade:</p>
+    <table class="color-table">
+      <tr><th>Age Range</th><th>Points Added</th></tr>
+      <tr><td>Under 50</td><td>0</td></tr>
+      <tr><td>50–59</td><td>+1</td></tr>
+      <tr><td>60–69</td><td>+2</td></tr>
+      <tr><td>70–79</td><td>+3</td></tr>
+      <tr><td>80+</td><td>+4</td></tr>
+    </table>
+    <p>The <strong>CCI Age factor</strong> filter in this tool lets you choose whether to include or exclude the age component from the CCI score. Excluding age isolates the effect of comorbidities alone.</p>
+
+    <h3>Reference</h3>
+    <p>Charlson ME, Pompei P, Ales KL, MacKenzie CR. A new method of classifying prognostic comorbidity in longitudinal studies: development and validation. <em>J Chronic Dis.</em> 1987;40(5):373-383. <a href="https://doi.org/10.1016/0021-9681(87)90171-8" target="_blank">DOI: 10.1016/0021-9681(87)90171-8</a></p>
   </div>
 
   <!-- Filters -->
@@ -231,8 +261,11 @@ pre code { background: none; padding: 0; color: inherit; }
         <h3>2. Age Group</h3>
         <ul>
           <li>All</li>
-          <li>18–49, 50–59, 60–69</li>
-          <li>70–79, 80+</li>
+          <li>18–49</li>
+          <li>50–59</li>
+          <li>60–69</li>
+          <li>70–79</li>
+          <li>80+</li>
         </ul>
       </div>
       <div class="filter-card">

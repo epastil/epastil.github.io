@@ -15,9 +15,9 @@ The Sankey diagram tracks patient distributions across several time points:
 
 1. **Before admission**
 2. **Hospital discharge**
-3. **6 months after discharge**
-4. **1 year after discharge**
-5. **2 years after discharge**
+3. **6 months post-discharge**
+4. **1 year post-discharge**
+5. **2 years post-discharge**
 
 Each colored block represents a **CCI category** at that time point:
 
@@ -30,6 +30,39 @@ Each colored block represents a **CCI category** at that time point:
 | Death        | <span style="color:rgb(148, 103, 189)">█</span>  Purple |
 
 Flows between blocks show how patients transition from one category to another over time.
+
+---
+
+# 📊 How CCI is Calculated
+
+The **Charlson Comorbidity Index (CCI)** is a weighted score that predicts 10-year mortality risk based on the presence of specific comorbid conditions. Each condition is assigned a weight reflecting its impact on mortality.
+
+## Condition Weights
+
+| Weight | Conditions |
+|--------|-----------|
+| **1 point** | Myocardial infarction, Congestive heart failure, Peripheral vascular disease, Cerebrovascular disease, Dementia, Chronic pulmonary disease, Connective tissue disease, Peptic ulcer disease, Mild liver disease, Diabetes without complications |
+| **2 points** | Hemiplegia, Moderate/severe renal disease, Diabetes with complications, Cancer (any), Leukemia, Lymphoma |
+| **3 points** | Moderate/severe liver disease |
+| **6 points** | Metastatic solid tumor, AIDS/HIV |
+
+## Age Factor
+
+When age is included, additional points are added based on age decade:
+
+| Age Range | Points Added |
+|-----------|-------------|
+| Under 50 | 0 |
+| 50–59 | +1 |
+| 60–69 | +2 |
+| 70–79 | +3 |
+| 80+ | +4 |
+
+The **CCI Age factor** filter in this tool lets you choose whether to include or exclude the age component from the CCI score. Excluding age isolates the effect of comorbidities alone.
+
+## Reference
+
+Charlson ME, Pompei P, Ales KL, MacKenzie CR. A new method of classifying prognostic comorbidity in longitudinal studies: development and validation. *J Chronic Dis.* 1987;40(5):373-383. [DOI: 10.1016/0021-9681(87)90171-8](https://doi.org/10.1016/0021-9681(87)90171-8)
 
 ---
 
