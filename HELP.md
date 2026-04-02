@@ -24,8 +24,8 @@ Each colored block represents a **CCI category** at that time point:
 | CCI Category | Color                                                   |
 |--------------|---------------------------------------------------------|
 | 0            | <span style="color:rgb(31, 119, 180)">█</span> Blue     |
-| 1–2          | <span style="color:rgb(255, 127, 14)">█</span> Orange   |
-| 3–4          | <span style="color:rgb(44, 160, 44)">█</span>  Green    |
+| 1–2          | <span style="color:rgb(44, 160, 44)">█</span> Green     |
+| 3–4          | <span style="color:rgb(255, 127, 14)">█</span> Orange   |
 | 5+           | <span style="color:rgb(214, 39, 40)">█</span>  Red      |
 | Death        | <span style="color:rgb(148, 103, 189)">█</span>  Purple |
 
