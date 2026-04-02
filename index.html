@@ -242,7 +242,8 @@ async function updateSankey() {
   const layout = {
     font: { size: 13 },
     // margin: { l: 10, r: 10, t: 80, b: 10 },
-    annotations: buildHeaderAnnotations(data.loc_map)
+    annotations: buildHeaderAnnotations(data.loc_map),
+    hoverlabel: {align: "left"}
   };
 
   Plotly.react("sankeyDiv", [trace], layout,  {displayModeBar: false});
