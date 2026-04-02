@@ -34,9 +34,9 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
 
 /* Manual legend */
 #legend-wrapper {
-  margin-top: 4px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 12px;
+  /*margin-top: 4px;*/
+  border-top: 1px solid #ccc;
+  padding-top: 12px;
 }
 .legend-section-title {
   margin: 10px 0 4px;
@@ -126,6 +126,11 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
 
 </div>
 
+
+
+<div id="status"></div>
+<div id="sankeyDiv"></div>
+
 <!-- Manual Legend -->
 <div id="legend-wrapper">
   <div class="legend-list">
@@ -137,9 +142,6 @@ button { padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
     <div class="legend-item"><span class="swatch" style="background:rgb(148, 103, 189)"></span>Death</div>
   </div>
 </div>
-
-<div id="status"></div>
-<div id="sankeyDiv"></div>
 
 <script>
 // ------------------- State -------------------
@@ -275,7 +277,7 @@ document.getElementById("labelModeSelect").addEventListener("change", e => { sta
 function resizeSankey() {
   var div = document.getElementById("sankeyDiv");
   var top = div.getBoundingClientRect().top;
-  var h = window.innerHeight - top - 30;
+  var h = window.innerHeight - top - 70;
   div.style.height = Math.max(h, 300) + "px";
   Plotly.relayout("sankeyDiv", { autosize: true });
 }
