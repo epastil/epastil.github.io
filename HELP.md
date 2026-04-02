@@ -4,7 +4,7 @@
 
 This page explains how to use the interactive Sankey diagram tool for visualizing multimorbidity trajectories and
 long-term outcomes of ICU patients.
-The visualization is fully interactive and supports filtering by **surgical status**, **sex**, **age group**, **CCI
+The visualization is fully interactive and supports filtering by **admission type**, **sex**, **age group**, **CCI
 calculation mode**, and **labeling mode**.
 
 ---
@@ -87,7 +87,7 @@ Each selection updates the Sankey plot immediately.
 * **70–79**
 * **80+**
 
-## 3️⃣ Surgical Status
+## 3️⃣ Admission Type
 * **All**
 * **Surgical**
 * **Medical**
