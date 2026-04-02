@@ -138,10 +138,6 @@ Move your mouse over nodes or flows to view:
 * Percentage (if enabled)
 * Transition counts between categories
 
-### 🔹 Zoom and Pan
-
-Use mouse scroll or touchpad pinch to zoom.
-Click-and-drag to pan the view.
 
 ### 🔹 Tooltips
 
